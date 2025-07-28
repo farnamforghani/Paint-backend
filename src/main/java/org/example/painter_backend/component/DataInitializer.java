@@ -13,10 +13,8 @@ public class DataInitializer implements CommandLineRunner {
     private UserRepository userRepository;
 
     @Override
-    public void run(String... args) throws Exception {
-        // Check if users already exist
+    public void run(String... args) {
         if (userRepository.count() == 0) {
-            // Create mock users
             User user1 = new User("john_doe", "john@example.com");
             User user2 = new User("jane_smith", "jane@example.com");
             User user3 = new User("mike_wilson", "mike@example.com");

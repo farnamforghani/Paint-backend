@@ -12,5 +12,4 @@ import java.util.Optional;
 public interface PaintingRepository extends JpaRepository<Painting, Long> {
     List<Painting> findByUserOrderByUpdatedAtDesc(User user);
     Optional<Painting> findByIdAndUser(Long id, User user);
-    void deleteByIdAndUser(Long id, User user);
 }

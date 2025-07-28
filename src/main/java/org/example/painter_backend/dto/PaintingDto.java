@@ -16,9 +16,6 @@ public class PaintingDto {
     private LocalDateTime timestamp;
     private String version;
 
-    // Constructors
-    public PaintingDto() {}
-
     public PaintingDto(String name, List<ShapeDto> shapes, String version) {
         this.name = name;
         this.shapes = shapes;

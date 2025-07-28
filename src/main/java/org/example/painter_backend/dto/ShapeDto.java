@@ -15,9 +15,6 @@ public class ShapeDto {
     private Double height;
     private String color;
 
-    // Constructors
-    public ShapeDto() {}
-
     public ShapeDto(String id, String type, Double x, Double y,
                     Double width, Double height, String color) {
         this.id = id;
