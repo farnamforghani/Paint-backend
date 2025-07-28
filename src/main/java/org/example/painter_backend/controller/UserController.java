@@ -11,7 +11,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/users")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 public class UserController {
 
     @Autowired
@@ -21,26 +21,6 @@ public class UserController {
     public ResponseEntity<List<User>> getAllUsers() {
         List<User> users = userService.getAllUsers();
         return ResponseEntity.ok(users);
-    }
-
-    @PostMapping("/signup")
-    public ResponseEntity<?> signUp(@RequestBody Map<String, String> request) {
-        try {
-            String username = request.get("username");
-            if (username == null || username.trim().isEmpty()) {
-                return ResponseEntity.badRequest()
-                        .body(Map.of("error", "Username is required"));
-            }
-
-            User user = userService.signUpUser(username.trim());
-            return ResponseEntity.ok(Map.of(
-                    "message", "User signed up successfully",
-                    "user", user
-            ));
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest()
-                    .body(Map.of("error", e.getMessage()));
-        }
     }
 
     @GetMapping("/check/{username}")

@@ -7,6 +7,7 @@ import org.example.painter_backend.model.Painting;
 import org.example.painter_backend.model.Shape;
 import org.example.painter_backend.model.User;
 import org.example.painter_backend.repository.PaintingRepository;
+import org.example.painter_backend.repository.ShapeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +21,8 @@ public class PaintingService {
 
     @Autowired
     private PaintingRepository paintingRepository;
+    @Autowired
+    private ShapeRepository shapeRepository;
 
     public List<PaintingDto> getUserPaintings(User user) {
         List<Painting> paintings = paintingRepository.findByUserOrderByUpdatedAtDesc(user);
@@ -42,8 +45,9 @@ public class PaintingService {
                 .map(shapeDto -> convertToShape(shapeDto, painting))
                 .collect(Collectors.toList());
 
-        painting.setShapes(shapes);
+        // painting.setShapes(shapes);
         Painting savedPainting = paintingRepository.save(painting);
+        shapeRepository.saveAll(shapes);
         return convertToDto(savedPainting);
     }
 
@@ -56,25 +60,25 @@ public class PaintingService {
             painting.setVersion(paintingDto.getVersion());
 
             // Clear existing shapes and add new ones
-            painting.getShapes().clear();
+            // painting.getShapes().clear();
+            List<Shape> removedShapes = shapeRepository.getByPainting(painting);
+            shapeRepository.deleteAll(removedShapes);
             List<Shape> shapes = paintingDto.getShapes().stream()
                     .map(shapeDto -> convertToShape(shapeDto, painting))
                     .collect(Collectors.toList());
-            painting.getShapes().addAll(shapes);
 
+            // painting.getShapes().addAll(shapes);
             Painting savedPainting = paintingRepository.save(painting);
+            shapeRepository.saveAll(shapes);
+
             return convertToDto(savedPainting);
         }
 
         throw new RuntimeException("Painting not found with id: " + id);
     }
 
-    public void deletePainting(Long id, User user) {
-        paintingRepository.deleteByIdAndUser(id, user);
-    }
-
     private PaintingDto convertToDto(Painting painting) {
-        List<ShapeDto> shapeDtos = painting.getShapes().stream()
+        List<ShapeDto> shapeDtos = shapeRepository.getByPainting(painting).stream()
                 .map(this::convertToShapeDto)
                 .collect(Collectors.toList());
 

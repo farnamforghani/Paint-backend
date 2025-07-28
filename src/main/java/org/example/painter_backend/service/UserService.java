@@ -26,14 +26,6 @@ public class UserService {
         return userRepository.findByUsername(username);
     }
 
-    public User signUpUser(String username) {
-        Optional<User> existingUser = userRepository.findByUsername(username);
-        if (existingUser.isPresent()) {
-            return existingUser.get();
-        }
-        throw new RuntimeException("User not found in mock database: " + username);
-    }
-
     public boolean userExists(String username) {
         return userRepository.existsByUsername(username);
     }

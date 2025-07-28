@@ -14,7 +14,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/paintings")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 public class PaintingController {
 
     @Autowired
@@ -90,20 +90,4 @@ public class PaintingController {
         }
     }
 
-    @DeleteMapping("/{id}/user/{username}")
-    public ResponseEntity<?> deletePainting(@PathVariable Long id, @PathVariable String username) {
-        Optional<User> user = userService.getUserByUsername(username);
-        if (user.isEmpty()) {
-            return ResponseEntity.badRequest()
-                    .body(Map.of("error", "User not found: " + username));
-        }
-
-        try {
-            paintingService.deletePainting(id, user.get());
-            return ResponseEntity.ok(Map.of("message", "Painting deleted successfully"));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest()
-                    .body(Map.of("error", "Failed to delete painting: " + e.getMessage()));
-        }
-    }
 }

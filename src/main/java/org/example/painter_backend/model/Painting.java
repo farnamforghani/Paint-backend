@@ -32,8 +32,8 @@ public class Painting {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @OneToMany(mappedBy = "painting", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Shape> shapes;
+//    @OneToMany(mappedBy = "painting", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//    private List<Shape> shapes;
 
     // Constructors
     public Painting() {
